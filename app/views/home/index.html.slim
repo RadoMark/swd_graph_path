@@ -1,0 +1,38 @@
+div
+  h2 Find path between two nodes (if exists)
+  = form_tag "/find_path"
+    label for="start_node_id"
+      | Start from
+    br
+    = text_field_tag "start_node_id", nil, required: true
+    br
+    label for="end_node_id"
+      | to
+    br
+    = text_field_tag "end_node_id", nil, required: true
+    br
+    = submit_tag
+    br
+
+  h2 Add or remove edges between nodes. Format: (id1,id2)(id3,id4).
+  = form_tag "/manage_edges" do
+    label for="add_edges"
+      | Edges to add
+    br
+    = text_field_tag "add_edges"
+    br
+    label for="remove_edges"
+      | Edges to remove
+    br
+    = text_field_tag "remove_edges"
+    br
+    = submit_tag
+
+  h2 Wipe out existing edges and nodes and upload new from CSV!
+  = form_tag "/upload", :multipart => true do
+
+    label for="file"
+      | Upload text File
+    = file_field_tag "file", required: true
+
+    = submit_tag

@@ -1,0 +1,35 @@
+div
+  a href=root_path
+    | Back to home
+  h2 List of edges
+  - Edge.includes(:node1, :node2).all.each do |edge|
+    = "From #{edge.node1.id} to #{edge.node2.id}"
+    br
+    = "Distance: #{edge.distance}, Time: #{edge.time}"
+    br
+    a href=edge_path(edge) data-method="delete"
+      | Destroy edge
+    br
+    p
+      | ====================
+
+  h2 List of nodes
+  - Node.all.each do |node|
+    - node_json = node.as_json
+    = "Id: #{node_json["id"]} | "
+    = "Store_id: #{node_json["store_id"]}"
+    br
+    = "Name: #{node_json["name"]} | "
+    = "Address: #{node_json["address_line_1"]}"
+    br
+    = "City: #{node_json["city"]} | "
+    = "Country: #{node_json["country"]}"
+    br
+    = "Latitude: #{node_json["latitude"].to_f} | "
+    = "Longitude: #{node_json["longitude"].to_f}"
+    br
+    a href=node_path(node) data-method="delete"
+      | Destroy node
+    br
+    p
+      | ====================

@@ -1,0 +1,9 @@
+div
+  - if @path.nil?
+    h1 No path or error
+  - else
+    h1 Path
+    = "Nodes sequence: #{@path.first.join(", ")}"
+    br
+    = "Distance: #{@path.last}"
+    br
