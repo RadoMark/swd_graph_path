@@ -13,3 +13,131 @@
  *= require_tree .
  *= require_self
  */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+body *{
+    font-family: "Lato";
+}
+body{
+    overflow: hidden;
+}
+
+
+/* Side Menu */
+.upload-img{
+    margin-bottom: 10px;
+}
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    right: 0;
+    width: 450px;
+    height: 100%;
+    overflow-y: auto;
+    background: #222;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    /*LENISTWO ! */
+    background: url('http://html.orange-idea.com/newera/wp-content/uploads/2014/06/abstract_minimalistic_digital_art_backgrounds_gradient_blurred_1920x1080_62125.jpg?id=468') no-repeat center center;
+}
+
+#map-canvas {
+    width: calc(100% - 450px);
+    height: 100%;
+    display: inline-block;
+    max-width: none;
+}
+
+
+/* Header */
+
+.header {
+    display: table;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+h2 {
+    color: #222;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+section {
+        margin-bottom: 10px;
+    display: inline-block;
+    width: 100%;
+}
+
+section ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+section ul li {
+    color: #222;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+section ul li a {
+    color: #222;
+}
+
+section label {
+    width: 120px;
+    display: inline-block;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+section input[type="text"] {
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 2px 2px 7px #222;
+    padding: 5px 10px;
+    width: calc(100% - 140px);
+    border-radius: 2px;
+}
+section input[type="submit"],.back-to-home{
+        float: right;
+    clear: both;
+    width: 100%;
+    margin: 2px 0 0;
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: lato;
+    border: none;
+    background: #222;
+    cursor: pointer;
+    color: white;
+    transition: all .3s ease;
+    box-shadow: inset 0px 0px 7px #222;
+    border-radius: 2px;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
+}
+section input[type="submit"]:hover, .back-to-home:hover{
+    background: white;
+    color: #222;
+}
