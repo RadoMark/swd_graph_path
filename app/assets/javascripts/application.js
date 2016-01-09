@@ -118,6 +118,7 @@ var starbucksMap = {
                 }
                 iterator++;
             });
+            console.log(waypts);
             that.directionsService = new google.maps.DirectionsService();
             that.directionsDisplay = new google.maps.DirectionsRenderer({
                 suppressMarkers: true
@@ -129,7 +130,7 @@ var starbucksMap = {
                 destination: end,
                 waypoints: waypts,
                 optimizeWaypoints: true,
-                travelMode: google.maps.DirectionsTravelMode.WALKING
+                travelMode: google.maps.DirectionsTravelMode.DRIVING
             };
 
             that.directionsService.route(routeToShop, function(response, status) {
