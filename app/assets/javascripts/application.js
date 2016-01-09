@@ -33,7 +33,7 @@ var starbucksMap = {
     infoBox: null,
     coordinates: [],
     directionsService: null,
-    directionsDisplay: null ,
+    directionsDisplay: null,
 
     init: function() {
         this.map = new google.maps.Map(jQuery(this.mapSelector).get(0), { // google.maps needs DOM not a jQuery object
@@ -92,15 +92,37 @@ var starbucksMap = {
 
         routePath.setMap(this.map);
         this.directionsService = new google.maps.DirectionsService();
-        this.setRouteToShop(14.22, 12.11);
     },
     drawRouteToShop: function() {
-        this.directionsService = new google.maps.DirectionsService();
-        this.directionsDisplay = new google.maps.DirectionsRenderer({
+        that = this;
+        var waypts = [];
+        waypts.push({
+            location: new google.maps.LatLng(52.700, 18),
+            stopover: true
+        });
+        start = new google.maps.LatLng(52.200, 19.134);
+        end = new google.maps.LatLng(52.450, 17);
+        that.directionsService = new google.maps.DirectionsService();
+        that.directionsDisplay = new google.maps.DirectionsRenderer({
             suppressMarkers: true
         });
-        this.directionsDisplay.setMap(this.map);
-    console.log('test');
+        
+        that.directionsDisplay.setMap(that.map);
+        var routeToShop = {
+            origin: start,
+            destination: end,
+            waypoints: waypts,
+            optimizeWaypoints: true,
+            travelMode: google.maps.DirectionsTravelMode.WALKING
+        };
+
+        that.directionsService.route(routeToShop, function(response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                that.directionsDisplay.setDirections(response);
+                var route = response.routes[0];
+            }
+        });
+        
     }
 
 
