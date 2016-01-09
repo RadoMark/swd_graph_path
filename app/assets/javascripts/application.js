@@ -43,14 +43,16 @@ var starbucksMap = {
         });
         this.setMarkers();
         this.drawMarkers();
-        this.drawPolyline();
     },
     setMarkers: function() {
         var json = window.rails_data;
         this.drawMarkers(json.nodes);
         this.drawMarkers(json);
         if (json.path) {
-            this.drawRouteToShop(json.path.nodes_sequence)
+            this.drawRouteToShop(json.path.nodes_sequence);
+            this.removeLine(null);
+        }else{
+            this.addLine(this.map);
         }
     },
     drawMarkers: function(nodes) {
@@ -87,7 +89,7 @@ var starbucksMap = {
             that.infoBox.open(that.map, this);
         })
     },
-    drawPolyline: function() {
+    drawPolyline: function(map) {
         var routePath = new google.maps.Polyline({
             path: this.coordinates,
             geodesic: true,
@@ -95,8 +97,14 @@ var starbucksMap = {
             strokeWeight: 1
         });
 
-        routePath.setMap(this.map);
+        routePath.setMap(map);
         this.directionsService = new google.maps.DirectionsService();
+    },
+    addLine: function(map){
+        this.drawPolyline(map);
+    },
+    removeLine: function(map){
+        this.drawPolyline(null);
     },
     drawRouteToShop: function(nodes) {
         that = this;
@@ -118,7 +126,6 @@ var starbucksMap = {
                 }
                 iterator++;
             });
-            console.log(waypts);
             that.directionsService = new google.maps.DirectionsService();
             that.directionsDisplay = new google.maps.DirectionsRenderer({
                 suppressMarkers: true
