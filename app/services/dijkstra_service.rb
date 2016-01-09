@@ -1,8 +1,18 @@
 class DijkstraService
-  def self.path(node1, node2, nodeTransit = nil)
+  def self.path(node1, node2, nodeWaypoint = nil)
     return if node1.nil? || node2.nil?
     start, stop = node1.id, node2.id
-    graph.shortest_path(start, stop)
+    if nodeWaypoint.nil?
+      graph.shortest_path(start, stop)
+    else
+      waypoint = nodeWaypoint.id
+      first_path = graph.shortest_path(start, waypoint)
+      last_path = graph.shortest_path(waypoint, stop)
+      distance = first_path.last + last_path.last
+      first_path.first.pop
+      path = (first_path.first + last_path.first).flatten
+      [path, distance]
+    end
   end
 
   def self.graph
