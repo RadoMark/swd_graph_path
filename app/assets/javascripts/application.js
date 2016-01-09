@@ -92,7 +92,6 @@ var starbucksMap = {
 
         routePath.setMap(this.map);
         this.directionsService = new google.maps.DirectionsService();
-        this.setRouteToShop(14.22, 12.11);
     },
     drawRouteToShop: function() {
         this.directionsService = new google.maps.DirectionsService();

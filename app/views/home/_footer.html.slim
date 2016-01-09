@@ -1,7 +1,10 @@
+- @nodes = Node.all.to_a
+- @edges = Edge.includes(:node1, :node2).all
+= pass_to_frontend(nodes: @nodes, edges: @edges)
 section
   h2 List of edges
   <ul>
-    - Edge.includes(:node1, :node2).all.each do |edge|
+    - @edges.each do |edge|
       <li>
         = "From #{edge.node1.id} to #{edge.node2.id}"
         br
@@ -14,11 +17,11 @@ section
   </ul>
   a href=root_path class="back-to-home"
     | Back to home
-  
+
 section
   h2 List of nodes
   <ul>
-  - Node.all.each do |node|
+  - @nodes.each do |node|
     - node_json = node.as_json
     <li>
       = "Id: #{node_json["id"]} | "
@@ -37,4 +40,4 @@ section
         | Destroy node
     </li>
   </ul>
-    
+
