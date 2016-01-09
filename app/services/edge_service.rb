@@ -14,7 +14,7 @@ class EdgeService
     response = JSON.parse(response)
     return unless edge.nil?
     begin
-      sleep(1)
+      sleep(1.5)
       Edge.create!(
         node1: node1,
         node2: node2,
@@ -22,7 +22,7 @@ class EdgeService
         time: response["routes"].first["legs"].first["duration"]["value"]
       )
     rescue StandardError => e
-      binding.pry
+      Rails.logger.error e.message
     end
   end
 end
