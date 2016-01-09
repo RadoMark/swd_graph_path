@@ -141,3 +141,9 @@ section input[type="submit"]:hover, .back-to-home:hover{
     background: white;
     color: #222;
 }
+
+.global-error {
+    color: red;
+    font-size: 25px;
+    font-weight: bold;
+}

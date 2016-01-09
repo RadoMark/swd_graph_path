@@ -1,3 +1,7 @@
+- if flash[:error]
+  section
+    p.global-error
+      = flash[:error]
 section
   h2 Find path between two nodes (if exists)
   = form_tag "/find_path"
