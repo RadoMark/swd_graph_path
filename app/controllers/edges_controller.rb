@@ -38,8 +38,25 @@ class EdgesController < ApplicationController
     redirect_to root_path
   end
 
-  def generate_random_edges
-    Node.all.each { |n| EdgeService.create(n, Node.where.not(id: n.id).to_a.sample) }
+  def generate_edges
+    city_nodes = Node.all.group_by { |n| n.city }
+    city_nodes["Wroclaw"] += city_nodes.delete("Bielany Wroclawskie")
+    city_nodes["Warszawa"] += city_nodes.delete("Warsaw")
+    city_nodes.each do |city, nodes|
+      nodes.each do |node1|
+        nodes.each do |node2|
+          EdgeService.create(node1, node2) if node1.id != node2.id
+        end
+      end
+    end
+
+    main_city_nodes = city_nodes.map { |city, nodes| nodes.first }
+    main_city_nodes.each do |node1|
+      main_city_nodes.each do |node2|
+        EdgeService.create(node1, node2) if node1.id != node2.id
+      end
+    end
+
     redirect_to root_path
   end
 end
