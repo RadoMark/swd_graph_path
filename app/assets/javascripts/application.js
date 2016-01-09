@@ -71,7 +71,6 @@ var starbucksMap = {
                 "to": new google.maps.LatLng(this.node2.latitude, this.node2.longitude)
             });
         });
-        console.log(that.coordinates);
     },
     addMarker: function(shop) {
         marker = new google.maps.Marker({
