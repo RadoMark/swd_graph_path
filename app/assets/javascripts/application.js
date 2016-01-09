@@ -6,23 +6,23 @@ var starbucksMap = {
         lng: 19.134,
         zoom: 7,
     },
-   /* test data
-   samplePoints: [{
-        "id": "1",
-        "lat": "52.200",
-        "lng": "19.134",
-        "title": "test1"
-    }, {
-        "id": "2",
-        "lat": "52.700",
-        "lng": "18",
-        "title": "test2"
-    }, {
-        "id": "3",
-        "lat": "52.450",
-        "lng": "17",
-        "title": "test3"
-    }],*/
+    /* test data
+    samplePoints: [{
+         "id": "1",
+         "lat": "52.200",
+         "lng": "19.134",
+         "title": "test1"
+     }, {
+         "id": "2",
+         "lat": "52.700",
+         "lng": "18",
+         "title": "test2"
+     }, {
+         "id": "3",
+         "lat": "52.450",
+         "lng": "17",
+         "title": "test3"
+     }],*/
     iconOptions: {
         url: 'http://media.tumblr.com/tumblr_m3zftkAVn41r017k2.gif',
         size: new google.maps.Size(32, 32),
@@ -47,11 +47,12 @@ var starbucksMap = {
     setMarkers: function() {
         var json = window.rails_data;
         this.drawMarkers(json.nodes);
-        this.drawMarkers(json);
+        this.getDrawPoints(json.edges)
         if (json.path) {
             this.drawRouteToShop(json.path.nodes_sequence);
             this.removeLine(null);
-        }else{
+        }
+        else {
             this.addLine(this.map);
         }
     },
@@ -59,14 +60,18 @@ var starbucksMap = {
         if (nodes) {
             for (i = 0; i < nodes.length; i++) {
                 this.addMarker(nodes[i]);
-                this.getDrawPoints(nodes[i]);
             }
         }
     },
     getDrawPoints: function(pointsToDraw) {
-        this.coordinates.push(
-            new google.maps.LatLng(pointsToDraw.latitude, pointsToDraw.longitude)
-        );
+        that = this;
+        jQuery.each(pointsToDraw, function() {
+            that.coordinates.push({
+                "from": new google.maps.LatLng(this.node1.latitude, this.node1.longitude),
+                "to": new google.maps.LatLng(this.node2.latitude, this.node2.longitude)
+            });
+        });
+        console.log(that.coordinates);
     },
     addMarker: function(shop) {
         marker = new google.maps.Marker({
@@ -90,20 +95,24 @@ var starbucksMap = {
         })
     },
     drawPolyline: function(map) {
-        var routePath = new google.maps.Polyline({
-            path: this.coordinates,
-            geodesic: true,
-            strokeOpacity: 1.0,
-            strokeWeight: 1
+        jQuery.each(this.coordinates, function() {
+            var line = [
+                this.from,
+                this.to
+            ];
+            var routePath = new google.maps.Polyline({
+                path: line,
+                geodesic: true,
+                strokeOpacity: 1.0,
+                strokeWeight: 1
+            });
+            routePath.setMap(map);
         });
-
-        routePath.setMap(map);
-        this.directionsService = new google.maps.DirectionsService();
     },
-    addLine: function(map){
+    addLine: function(map) {
         this.drawPolyline(map);
     },
-    removeLine: function(map){
+    removeLine: function(map) {
         this.drawPolyline(null);
     },
     drawRouteToShop: function(nodes) {
@@ -118,7 +127,7 @@ var starbucksMap = {
                 else if (iterator == nodes.length - 1) {
                     end = new google.maps.LatLng(this.latitude, this.longitude);
                 }
-                else{
+                else {
                     waypts.push({
                         location: new google.maps.LatLng(this.latitude, this.longitude),
                         stopover: true
