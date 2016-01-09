@@ -1,3 +1,5 @@
+//= require jquery_ujs
+
 var starbucksMap = {
     mapSelector: '#map-canvas',
 
