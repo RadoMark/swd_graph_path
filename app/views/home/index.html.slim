@@ -4,12 +4,16 @@ section
     ul
       li
         label for="start_node_id"
-          | Start from
+          | Start from *
         = text_field_tag "start_node_id", nil, required: true
       li
         label for="end_node_id"
-          | to
+          | to *
         = text_field_tag "end_node_id", nil, required: true
+      li
+        label for="waypoint_node_id"
+          | waypoint
+        = text_field_tag "waypoint_node_id", nil, required: false
       li
         = submit_tag
 section
