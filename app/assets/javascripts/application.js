@@ -6,7 +6,8 @@ var starbucksMap = {
         lng: 19.134,
         zoom: 7,
     },
-    samplePoints: [{
+   /* test data
+   samplePoints: [{
         "id": "1",
         "lat": "52.200",
         "lng": "19.134",
@@ -21,7 +22,7 @@ var starbucksMap = {
         "lat": "52.450",
         "lng": "17",
         "title": "test3"
-    }],
+    }],*/
     iconOptions: {
         url: 'http://media.tumblr.com/tumblr_m3zftkAVn41r017k2.gif',
         size: new google.maps.Size(32, 32),
@@ -40,34 +41,38 @@ var starbucksMap = {
             zoom: this.start.zoom,
             center: this.start
         });
+        this.setMarkers();
         this.drawMarkers();
         this.drawPolyline();
-        this.drawRouteToShop();
     },
     setMarkers: function() {
-        //get all markers form ajax
+        var json = window.rails_data;
+        this.drawMarkers(json.nodes);
+        this.drawMarkers(json);
+        if (json.path) {
+            this.drawRouteToShop(json.path.nodes_sequence)
+        }
     },
-    drawMarkers: function() {
-        if (this.samplePoints) {
-            for (i = 0; i < this.samplePoints.length; i++) {
-                this.addMarker(this.samplePoints[i]);
-                this.getDrawPoints(this.samplePoints[i]);
+    drawMarkers: function(nodes) {
+        if (nodes) {
+            for (i = 0; i < nodes.length; i++) {
+                this.addMarker(nodes[i]);
+                this.getDrawPoints(nodes[i]);
             }
         }
     },
     getDrawPoints: function(pointsToDraw) {
-        this.coordinates.push({
-            "lat": Number(pointsToDraw.lat),
-            "lng": Number(pointsToDraw.lng),
-        });
+        this.coordinates.push(
+            new google.maps.LatLng(pointsToDraw.latitude, pointsToDraw.longitude)
+        );
     },
     addMarker: function(shop) {
         marker = new google.maps.Marker({
-            position: new google.maps.LatLng(shop.lat, shop.lng),
+            position: new google.maps.LatLng(shop.latitude, shop.longitude),
             map: this.map,
             icon: this.iconOptions,
             animation: google.maps.Animation.DROP,
-            title: shop.title,
+            title: '<span><b>' + shop.name + '</b><span><br />' + shop.address_line_1,
             zIndex: 9998
         });
         this.setMarkerInfo(marker);
@@ -87,42 +92,53 @@ var starbucksMap = {
             path: this.coordinates,
             geodesic: true,
             strokeOpacity: 1.0,
-            strokeWeight: 3
+            strokeWeight: 1
         });
 
         routePath.setMap(this.map);
         this.directionsService = new google.maps.DirectionsService();
     },
-    drawRouteToShop: function() {
+    drawRouteToShop: function(nodes) {
         that = this;
-        var waypts = [];
-        waypts.push({
-            location: new google.maps.LatLng(52.700, 18),
-            stopover: true
-        });
-        start = new google.maps.LatLng(52.200, 19.134);
-        end = new google.maps.LatLng(52.450, 17);
-        that.directionsService = new google.maps.DirectionsService();
-        that.directionsDisplay = new google.maps.DirectionsRenderer({
-            suppressMarkers: true
-        });
-        
-        that.directionsDisplay.setMap(that.map);
-        var routeToShop = {
-            origin: start,
-            destination: end,
-            waypoints: waypts,
-            optimizeWaypoints: true,
-            travelMode: google.maps.DirectionsTravelMode.WALKING
-        };
+        if (nodes.length > 1) {
+            var waypts = [];
+            var iterator = 0;
+            jQuery.each(nodes, function() {
+                if (iterator == 0) {
+                    start = new google.maps.LatLng(this.latitude, this.longitude);
+                }
+                else if (iterator == nodes.length - 1) {
+                    end = new google.maps.LatLng(this.latitude, this.longitude);
+                }
+                else{
+                    waypts.push({
+                        location: new google.maps.LatLng(this.latitude, this.longitude),
+                        stopover: true
+                    });
+                }
+                iterator++;
+            });
+            that.directionsService = new google.maps.DirectionsService();
+            that.directionsDisplay = new google.maps.DirectionsRenderer({
+                suppressMarkers: true
+            });
 
-        that.directionsService.route(routeToShop, function(response, status) {
-            if (status == google.maps.DirectionsStatus.OK) {
-                that.directionsDisplay.setDirections(response);
-                var route = response.routes[0];
-            }
-        });
-        
+            that.directionsDisplay.setMap(that.map);
+            var routeToShop = {
+                origin: start,
+                destination: end,
+                waypoints: waypts,
+                optimizeWaypoints: true,
+                travelMode: google.maps.DirectionsTravelMode.WALKING
+            };
+
+            that.directionsService.route(routeToShop, function(response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    that.directionsDisplay.setDirections(response);
+                    var route = response.routes[0];
+                }
+            });
+        }
     }
 
 
