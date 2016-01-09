@@ -17,5 +17,9 @@ class NodesController < ApplicationController
   def find_path
     start_node_id, end_node_id = params["start_node_id"].to_i, params["end_node_id"].to_i
     @path = DijkstraService.path(Node.find(start_node_id), Node.find(end_node_id))
+    @path = {
+      nodes_sequence: @path.first.map! { |node_id| Node.find(node_id) },
+      distance: @path.last
+    }
   end
 end

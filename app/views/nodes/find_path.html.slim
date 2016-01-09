@@ -1,9 +1,10 @@
+= pass_to_frontend(path: @path)
 div
   - if @path.nil?
     h1 No path or error
   - else
     h1 Path
-    = "Nodes sequence: #{@path.first.join(", ")}"
+    = "Nodes sequence: #{@path[:nodes_sequence].map(&:id).join(", ")}"
     br
-    = "Distance: #{@path.last}"
+    = "Distance: #{@path[:distance]}"
     br
