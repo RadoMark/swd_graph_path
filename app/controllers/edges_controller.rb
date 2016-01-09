@@ -22,25 +22,7 @@ class EdgesController < ApplicationController
       node1 = Node.find(edge_nodes_ids.first)
       node2 = Node.find(edge_nodes_ids.last)
       next if node1.nil? || node2.nil?
-      edge =
-        Edge.where(node1_id: node1.id, node2_id: node2.id).first ||
-        Edge.where(node1_id: node2.id, node2_id: node1.id).first
-
-      response = RestClient.get(
-        "https://maps.googleapis.com/maps/api/directions/json",
-        params: {
-          origin: "#{node1.latitude},#{node1.longitude}",
-          destination: "#{node2.latitude},#{node2.longitude}"
-        }
-      )
-      response = JSON.parse(response)
-      next unless edge.nil?
-      Edge.create!(
-        node1: node1,
-        node2: node2,
-        distance: response["routes"].first["legs"].first["distance"]["value"],
-        time: response["routes"].first["legs"].first["duration"]["value"]
-      )
+      EdgeService.create(node1, node2)
     end
 
     remove_edges.each do |edge_nodes_ids|
@@ -53,6 +35,11 @@ class EdgesController < ApplicationController
       edge.destroy unless edge.nil?
     end
 
+    redirect_to root_path
+  end
+
+  def generate_random_edges
+    Node.all.each { |n| EdgeService.create(n, Node.where.not(id: n.id).to_a.sample) }
     redirect_to root_path
   end
 end
