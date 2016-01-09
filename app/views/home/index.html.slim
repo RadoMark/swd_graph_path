@@ -15,7 +15,7 @@ section
           | waypoint
         = text_field_tag "waypoint_node_id", nil, required: false
       li
-        = submit_tag
+        = submit_tag "Find path"
 section
   h2 Add or remove edges between nodes. Format: (id1,id2)(id3,id4).
   = form_tag "/manage_edges" do
@@ -29,7 +29,7 @@ section
           | Edges to remove
         = text_field_tag "remove_edges"
       li
-        = submit_tag
+        = submit_tag "Apply changes"
 section
   h2 Wipe out existing edges and nodes and upload new from CSV!
   = form_tag "/upload", :multipart => true do
@@ -38,4 +38,4 @@ section
         | Upload text File
       = file_field_tag "file", required: true
 
-    = submit_tag
+    = submit_tag "Upload (dangerous)"
