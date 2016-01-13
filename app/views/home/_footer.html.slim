@@ -2,6 +2,11 @@
 - @edges = Edge.includes(:node1, :node2).all
 = pass_to_frontend(nodes: @nodes, edges: @edges)
 section
+  a href=root_path class="back-to-home"
+    | Back to home
+  a href=generate_edges_path class="back-to-home"
+    | Generate edges (can take up to few minutes)
+section
   h2 List of edges
   <ul>
     - @edges.each do |edge|
@@ -15,10 +20,6 @@ section
         br
       </li>
   </ul>
-  a href=root_path class="back-to-home"
-    | Back to home
-  a href=generate_edges_path class="back-to-home"
-    | Generate edges (can take up to few minutes)
 
 section
   h2 List of nodes
