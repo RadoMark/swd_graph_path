@@ -96,6 +96,10 @@ section ul li {
     font-size: 12px;
 }
 
+section ul li select{
+    max-width: 100%;
+}
+
 section ul li a {
     color: #222;
 }
