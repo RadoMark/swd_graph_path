@@ -6,18 +6,31 @@ section
   h2 Find path between two nodes (if exists)
   = form_tag "/find_path"
     ul
+      - select_options = options_from_collection_for_select(Node.all.to_a, "id", "select_option")
       li
         label for="start_node_id"
           | Start from *
-        = text_field_tag "start_node_id", nil, required: true
+        = select_tag(\
+            "start_node_id",
+            select_options,
+            required: true\
+          )
       li
         label for="end_node_id"
           | to *
-        = text_field_tag "end_node_id", nil, required: true
+        = select_tag(\
+            "end_node_id",
+            select_options,
+            required: true\
+          )
       li
         label for="waypoint_node_id"
           | waypoint
-        = text_field_tag "waypoint_node_id", nil, required: false
+        = select_tag(\
+            "waypoint_node_id",
+            select_options,
+            required: false\
+          )
       li
         = submit_tag "Find path"
 section

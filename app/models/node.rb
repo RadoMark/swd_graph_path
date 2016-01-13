@@ -6,4 +6,8 @@ class Node < ActiveRecord::Base
       only: [:id, :store_id, :name, :address_line_1, :city, :country, :latitude, :longitude]
     }.merge(options))
   end
+
+  def select_option
+    "#{id}: #{name}, #{address_line_1} (#{city})"
+  end
 end
