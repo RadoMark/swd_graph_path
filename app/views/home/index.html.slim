@@ -29,7 +29,8 @@ section
         = select_tag(\
             "waypoint_node_id",
             select_options,
-            required: false\
+            required: false,
+            include_blank: "",
           )
       li
         = submit_tag "Find path"
